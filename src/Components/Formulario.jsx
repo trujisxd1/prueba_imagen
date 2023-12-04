@@ -3,13 +3,14 @@ import { Drawer, Form, Input, Button, Space, Row, Col } from "antd";
 import { useState } from "react";
 
 
+
 // eslint-disable-next-line react/prop-types
 const Formulario = ({ form, setform }) => {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [nombre, setnombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
 
-  const [imagen, setImagen] = useState(null);
+  const [imagen, setImagen] = useState(undefined);
 
   const showDrawer = () => setDrawerVisible(true);
   const onClose = () => setDrawerVisible(false);
@@ -20,6 +21,8 @@ const Formulario = ({ form, setform }) => {
     setform([...form, formData]);
     setnombre("");
     setDescripcion("");
+
+    console.log(form )
   
     setImagen(null);
     onClose();
@@ -32,12 +35,12 @@ const Formulario = ({ form, setform }) => {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.onloadend = () => {
-      setImagen(reader.result);
+      setImagen(reader.result || undefined);
     };
     if (file) {
       reader.readAsDataURL(file);
     } else {
-      setImagen(null);
+      setImagen(undefined);
     }
   };
 
@@ -119,7 +122,7 @@ const Formulario = ({ form, setform }) => {
                   },
                 ]}
               >
-                <input
+                <Input
                   type="file"
                   
                   onChange={handleImagenChange}
