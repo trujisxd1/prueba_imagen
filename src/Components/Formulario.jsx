@@ -1,11 +1,12 @@
 
 import { Drawer, Form, Input, Button, Space, Row, Col } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import { useState } from "react";
 
 
 
 // eslint-disable-next-line react/prop-types
-const Formulario = ({ form, setform }) => {
+const Formulario = ({ form, setform,tags }) => {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [nombre, setnombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
@@ -18,17 +19,17 @@ const Formulario = ({ form, setform }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = { nombre, descripcion, imagen };
-    setform([...form, formData]);
+    setform( formData);
     setnombre("");
     setDescripcion("");
 
-    console.log(form )
-  
+    // console.log(form)
+
     setImagen(null);
     onClose();
   };
 
-  
+
 
 
   const handleImagenChange = (e) => {
@@ -47,10 +48,10 @@ const Formulario = ({ form, setform }) => {
   return (
     <>
       <Button type="primary" className="is-pulled-lef" onClick={showDrawer}>
-        Abrir Drawer
+        crear nuevo 
       </Button>
       <Drawer
-        title="Create a new account"
+        title="Crear nuevo machote"
         width={720}
         onClose={onClose}
         open={drawerVisible}
@@ -95,12 +96,12 @@ const Formulario = ({ form, setform }) => {
                 rules={[
                   {
                     required: true,
-                    message: "Por favor ingrese un apellido",
+                    message: "Por favor ingrese una descrpcion",
                   },
                 ]}
               >
-                <Input
-                  placeholder="Por favor ingrese un apellido"
+                <TextArea
+                  placeholder="Por favor ingrese una descripcion"
                   value={descripcion}
                   onChange={(e) => setDescripcion(e.target.value)}
                 />
@@ -109,7 +110,7 @@ const Formulario = ({ form, setform }) => {
           </Row>
           <Row gutter={16}>
             <Col span={12}>
-             
+
             </Col>
             <Col span={12}>
               <Form.Item
@@ -124,7 +125,7 @@ const Formulario = ({ form, setform }) => {
               >
                 <Input
                   type="file"
-                  
+
                   onChange={handleImagenChange}
                 />
               </Form.Item>
@@ -134,6 +135,9 @@ const Formulario = ({ form, setform }) => {
       </Drawer>
 
       
+       
+      
+
     </>
   );
 };
