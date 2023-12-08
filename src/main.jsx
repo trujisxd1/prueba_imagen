@@ -7,6 +7,7 @@ import Prueba from './Components/Prueba.jsx'
 import Mainapp from './App.jsx'
 import Fronten from './Components/Fronten.jsx'
 import CompImagen from './Components/CompImagen.jsx'
+import CovaluFor from './Components/CovaluFor.jsx'
 
 
 const router = createBrowserRouter(
@@ -27,6 +28,10 @@ const router = createBrowserRouter(
      {
       path:"/img",
       element:<CompImagen/>
+     },
+     {
+      path:"form",
+      element:<CovaluFor/>
      }
     ]
   }]

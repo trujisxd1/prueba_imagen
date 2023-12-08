@@ -1,4 +1,5 @@
 import { Input, Button } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import { useState, useRef } from "react";
 
 const Tabla = ({ form, tags, setTags }) => {
@@ -7,7 +8,7 @@ const Tabla = ({ form, tags, setTags }) => {
   const [descripcionFija, setDescripcionFija] = useState(false);
   const [posicion, setPosicion] = useState({ x: 0, y: 0 });
   const [nuevaDescripcion, setNuevaDescripcion] = useState("");
-  
+  const [editando, setEditando] = useState(null);
   const containerRef = useRef(null);
 
   const handleClick = (event, item) => {
@@ -19,19 +20,35 @@ const Tabla = ({ form, tags, setTags }) => {
   };
 
   const agregarNuevaDescripcion = () => {
-    setTags((prevTags) => [...prevTags, { descripcion: nuevaDescripcion, posX: null, posY: null }]);
+    const nuevaTag = {
+      descripcion: nuevaDescripcion,
+      posX: posicion.x,
+      posY: posicion.y,
+    };
+    setTags((prevTags) => [...prevTags, nuevaTag]);
     setNuevaDescripcion("");
   };
 
-  console.log(tags);
-  console.log(posicion);
-  console.log(descripcionFija);
+  const handleEditar = (index) => {
+    const tag = tags[index];
+    setNuevaDescripcion(tag.descripcion || "");
+    setPosicion({ x: tag.posX || 0, y: tag.posY || 0 });
+    setEditando(index);
+  };
 
-  const descripcion = [
-    { desc: "Bateria(Modulo)", posX: 678.4874877929688, posY: 951.3999938964844 },
-    { desc: "Pantalla", desc1: "-Pantalla de segmentos", desc2: "-Pantalla matricial", posX: 313.48748779296875, posY: 977.3999938964844 },
-    // {desc:"bomba para agua xdd",posX:326.48748779296875 , posY:681.1999969482422}
-  ];
+  const handleGuardar = () => {
+    if (editando !== null) {
+      setTags((prevTags) =>
+        prevTags.map((tag, index) =>
+          index === editando
+            ? { ...tag, descripcion: nuevaDescripcion, posX: posicion.x, posY: posicion.y }
+            : tag
+        )
+      );
+      setEditando(null);
+      setNuevaDescripcion("");
+    }
+  };
 
   return (
     <div
@@ -45,7 +62,6 @@ const Tabla = ({ form, tags, setTags }) => {
         padding: "20px",
       }}
     >
-      {/* Contenedor superior que parece una línea */}
       <div
         className="line-container"
         style={{
@@ -89,30 +105,64 @@ const Tabla = ({ form, tags, setTags }) => {
         </div>
       )}
 
-      {descripcion.map((p) => (
+      {tags.map((t, i) => (
         <div
-          key={p.posX}
+          key={t.posX}
           style={{
             position: descripcionFija ? "fixed" : "absolute",
-            top: p.posY,
-            left: p.posX,
+            top: t.posY,
+            left: t.posX,
             transform: "translate(-50%, -50%)",
           }}
         >
-          <p>{p.desc}</p>
-          <p>{p.desc1}</p>
-          <p>{p.desc2}</p>
+          <p>{t.descripcion}</p>
         </div>
       ))}
 
       <div>
-        <Input
+        <TextArea
           placeholder="Nueva descripción"
           value={nuevaDescripcion}
           onChange={(e) => setNuevaDescripcion(e.target.value)}
         />
         <Button onClick={agregarNuevaDescripcion}>Guardar</Button>
       </div>
+
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Descripción</th>
+            <th>Editar</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          {tags.map((t, i) => (
+            <tr key={i}>
+              <td>
+                {editando === i ? (
+                  <>
+                    <TextArea
+                      placeholder="Nueva descripción"
+                      value={nuevaDescripcion}
+                      onChange={(e) => setNuevaDescripcion(e.target.value)}
+                    />
+                    <Button onClick={handleGuardar}>Guardar</Button>
+                  </>
+                ) : (
+                  t.descripcion
+                )}
+              </td>
+              <td>
+                <button className="button is-info" onClick={() => handleEditar(i)}>
+                  Editar
+                </button>
+              </td>
+              
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

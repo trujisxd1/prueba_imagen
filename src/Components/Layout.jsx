@@ -24,7 +24,10 @@ const Layout = () => {
   <p className="level-item has-text-centered">
     <Link to={"/img"} className="link is-info">Img</Link>
   </p>
- 
+    
+  <p className="level-item has-text-centered">
+    <Link to={"/form"} className="link is-info">formulario</Link>
+  </p>
 </nav>
 
 
